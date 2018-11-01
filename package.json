@@ -1,0 +1,22 @@
+{
+  "name": "pact-demo",
+  "version": "1.0.0",
+  "description": "Demonstrator application for consumer-driven contract testing",
+  "main": "index.js",
+  "author": "Adam Fitzpatrick",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "browser-sync start -s -f . --no-notify --host $LOCAL_IP --port 7001 --no-open",
+    "pact": "mocha test/**/*.spec.js"
+  },
+  "devDependencies": {
+    "@pact-foundation/pact": "6.0.2",
+    "browser-sync": "^2.26.3",
+    "chai": "4.2.0",
+    "chai-as-promised": "7.1.1",
+    "faker": "4.1.0",
+    "mocha": "5.2.0",
+    "node-fetch": "2.2.0"
+  }
+}

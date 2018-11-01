@@ -1,0 +1,100 @@
+{
+  "consumer": {
+    "name": "App"
+  },
+  "provider": {
+    "name": "StudentService"
+  },
+  "interactions": [
+    {
+      "description": "a student with ID 1234",
+      "providerState": "is listening",
+      "request": {
+        "method": "POST",
+        "path": "/students/1234",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "id": "1234",
+          "firstName": "Billy",
+          "lastName": "Beakins"
+        },
+        "matchingRules": {
+          "$.body": {
+            "match": "type"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*"
+        }
+      }
+    },
+    {
+      "description": "a request for a list of students",
+      "providerState": "has one or more students in the DB",
+      "request": {
+        "method": "GET",
+        "path": "/students"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*"
+        },
+        "body": [
+          {
+            "id": "1234",
+            "firstName": "Billy",
+            "lastName": "Beakins"
+          }
+        ]
+      }
+    },
+    {
+      "description": "a request for a student with ID 1234",
+      "providerState": "has a student with ID 1234",
+      "request": {
+        "method": "GET",
+        "path": "/students/1234"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*"
+        },
+        "body": {
+          "id": "1234",
+          "firstName": "Billy",
+          "lastName": "Beakins"
+        }
+      }
+    },
+    {
+      "description": "a request for a student with ID 1",
+      "providerState": "does not have student with ID 1234",
+      "request": {
+        "method": "GET",
+        "path": "/students/1234"
+      },
+      "response": {
+        "status": 404,
+        "headers": {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*"
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  }
+}
