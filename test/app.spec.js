@@ -4,13 +4,13 @@ chai.should();
 chai.use(require('chai-as-promised'));
 global.fetch = require('node-fetch');
 const { Pact, Matchers } = require('@pact-foundation/pact');
-const { like } = Matchers;
-const App = require('../app/api-consumer');
+const { like, eachLike } = Matchers;
+const ApiConsumer = require('../app/api-consumer');
 const MOCK_SERVER_PORT = 2202;
 
 describe('Pact', () => {
   const provider = new Pact({
-    consumer: 'App',
+    consumer: 'app',
     provider: 'StudentService',
     port: MOCK_SERVER_PORT,
     log: path.resolve(process.cwd(), 'logs', 'pact.log'),
@@ -28,7 +28,7 @@ describe('Pact', () => {
   let app;
 
   before(() => {
-    app = new App(MOCK_SERVER_PORT);
+    app = new ApiConsumer(MOCK_SERVER_PORT);
     return provider.setup();
   });
 
@@ -37,7 +37,7 @@ describe('Pact', () => {
       before(() => {
         return provider.addInteraction({
           state: 'is listening',
-          uponReceiving: 'a student with ID 1234',
+          uponReceiving: 'a request to store a student with ID of 1234',
           withRequest: {
             method: 'POST',
             path: '/students/1234',
@@ -74,10 +74,10 @@ describe('Pact', () => {
         willRespondWith: {
           status: 200,
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json; charset=utf-8',
             'Access-Control-Allow-Origin': '*'
           },
-          body: [ STUDENT ]
+          body: eachLike(STUDENT, { min: 1 })
         }
       });
     });
@@ -108,10 +108,10 @@ describe('Pact', () => {
           willRespondWith: {
             status: 200,
             headers: {
-              'Content-Type': 'application/json',
+              'Content-Type': 'application/json; charset=utf-8',
               'Access-Control-Allow-Origin': '*'
             },
-            body: STUDENT
+            body: like(STUDENT)
           }
         });
       });
